@@ -12,57 +12,80 @@ import instrusions from "../assets/instrusions.jpg";
 import avoidance from "../assets/avoidance.jpg";
 
 const Result: React.FC = () => {
-  const [data, setData] = useState({} as UserResult);
+  const [results, setResults] = useState<UserResult[]>([]);
   const params = useParams();
+  const latestResult = results[0];
 
   useEffect(() => {
     (async () => {
       const res = await getUserResults((params as { id: string }).id);
-      setData(res[0]);
+      setResults(res);
     })();
   }, [params]);
 
   const colorDeterminer = () => {
-    if (data.total > 50) return "red";
-    else if (data.total > 25) return "blue";
+    if (latestResult.total > 50) return "red";
+    else if (latestResult.total > 25) return "blue";
     return "green";
   };
 
   const severityDeterminer = () => {
-    if (data.total > 50) return "High";
-    else if (data.total > 25) return "Medium";
+    if (latestResult.total > 50) return "High";
+    else if (latestResult.total > 25) return "Medium";
     return "Low";
   };
 
-  // const resultDeterminer = () => {
-  //   if (data.total > 50) return "High";
-  //   else if (data.total > 25) return "Medium";
-  //   return "Low";
-  // };
+  const resultMessageDeterminer = () => {
+    let resultMessage = "";
+    const end =
+      "You need to consult or follow a Doctor instructions immidiately. Failing to do so might result to Chronic illness, emotional problems or even death";
+
+    if (results.length === 1)
+      resultMessage += "You have successfully completed your first survey. ";
+    if (latestResult.total > 50)
+      resultMessage += "Your score shows that you are suffering from excessive stress. " + end;
+    else if (latestResult.total > 25)
+      resultMessage += "Your score shows that you are suffering from some stress. " + end;
+    else
+      resultMessage +=
+        "Your score shows that you are quiet stressed up. It is at a beginning stage. You need to follow some recommended guidelines from a Doctor. Failing to do so might result into more serious stress and can lead to Chronic illness, emotional problems or even death";
+
+    return resultMessage;
+  };
+
+  if (!results.length)
+    return (
+      <p>
+        User data could not be determined. Make sure you have submitted a survey with the username
+        specified in the URL
+      </p>
+    );
 
   return (
     <div className="result">
       <Header title="Latest Result" />
       <p>Base on the data collected we were able to determine the following scores:</p>
       <div className="result__grid">
-        <ResultCard title="Avoidance" image={avoidance} value={data.avoidance} />
-        <ResultCard title="Intrusions" image={instrusions} value={data.intrusions} />
-        <ResultCard title="Cognitions" image={cognition} value={data.cognitions} />
-        <ResultCard title="Hypervigilance" image={hypertension} value={data.hypervigilance} />
+        <ResultCard title="Avoidance" image={avoidance} value={latestResult.avoidance} />
+        <ResultCard title="Intrusions" image={instrusions} value={latestResult.intrusions} />
+        <ResultCard title="Cognitions" image={cognition} value={latestResult.cognitions} />
+        <ResultCard
+          title="Hypervigilance"
+          image={hypertension}
+          value={latestResult.hypervigilance}
+        />
       </div>
       <div className="result__total">
         <p>
           Total:
-          <span style={{ color: colorDeterminer() }}>{data.total}</span>
+          <span style={{ color: colorDeterminer() }}>{latestResult.total}</span>
         </p>
         <p>
           Health Severity: <span style={{ color: colorDeterminer() }}>{severityDeterminer()}</span>
         </p>
       </div>
-      <p>
-        You got an avoidance score of {data.avoidance}. This means you have higher chances of...
-      </p>
-      <LineChart />
+      <p className="result__message">{resultMessageDeterminer()}</p>
+      <LineChart result={results} />
     </div>
   );
 };
