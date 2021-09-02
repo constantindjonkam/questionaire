@@ -16,8 +16,12 @@ const QuestionaireTable: React.FC<QuestionaireTableProps> = () => {
     if (getAllQuestions().length !== answers.length)
       return alert("You must complete all the questions");
 
-    addResult("gostar", answers);
-    history.push("/result");
+    const username = prompt("Please enter your username");
+    if (!username?.trim())
+      return alert("You must enter a username to link your result to the database");
+
+    addResult(username || "", answers);
+    history.push("/result/" + username);
   };
 
   return (
