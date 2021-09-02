@@ -1,0 +1,53 @@
+.questionaireTable {
+  width: 100%;
+  margin: 0 auto;
+  border-collapse: collapse;
+
+  > thead > tr > th {
+    font-weight: 500;
+    text-align: left;
+  }
+
+  > thead > tr > th > p {
+    margin-bottom: 10px;
+  }
+
+  > thead > tr > th:nth-child(1) {
+    padding-left: 10px;
+  }
+
+  > tbody > tr:nth-child(2n + 1) {
+    background-color: #f0f0f0;
+  }
+}
+
+.questionaireTable__questions {
+  max-width: 500px;
+  padding: 10px 0 10px 10px;
+  text-align: left;
+  font-weight: 300;
+}
+
+.questionaireTable__input {
+  cursor: pointer;
+}
+
+.button {
+  border: 1px solid #007bff;
+  color: #007bff;
+  font-weight: 500;
+  width: max-content;
+  padding: 12px;
+  border-radius: 5px;
+  margin: 20px 0 20px auto;
+  cursor: pointer;
+
+  &:hover {
+    color: white;
+    background-color: #007bff;
+  }
+
+  &:active {
+    background-color: #013d7e;
+  }
+}
