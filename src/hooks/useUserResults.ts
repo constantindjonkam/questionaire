@@ -13,7 +13,7 @@ const useUserResults = () => {
       const res = await getUserResults((params as { id: string }).id);
       setResults(res);
     })();
-  }, [params]);
+  }, [results, params]);
 
   return { results, latestResult };
 };
