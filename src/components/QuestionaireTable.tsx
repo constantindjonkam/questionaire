@@ -26,31 +26,33 @@ const QuestionaireTable: React.FC<QuestionaireTableProps> = () => {
 
   return (
     <>
-      <table className="questionaireTable">
-        <thead>
-          <tr>
-            <th>
-              <p>In the past month, how much were you bothered by:</p>
-            </th>
-            <th>
-              <p>Not at all</p>
-            </th>
-            <th>
-              <p>A liitle bit</p>
-            </th>
-            <th>
-              <p>Moderately</p>
-            </th>
-            <th>
-              <p>Quite a bit</p>
-            </th>
-            <th>
-              <p>Extremely</p>
-            </th>
-          </tr>
-        </thead>
-        <TableBody answers={answers} setAnswers={setAnswers} />
-      </table>
+      <div className="questionaireTable__container">
+        <table className="questionaireTable">
+          <thead>
+            <tr>
+              <th>
+                <p>In the past month, how much were you bothered by:</p>
+              </th>
+              <th>
+                <p>Not at all</p>
+              </th>
+              <th>
+                <p>A liitle bit</p>
+              </th>
+              <th>
+                <p>Moderately</p>
+              </th>
+              <th>
+                <p>Quite a bit</p>
+              </th>
+              <th>
+                <p>Extremely</p>
+              </th>
+            </tr>
+          </thead>
+          <TableBody answers={answers} setAnswers={setAnswers} />
+        </table>
+      </div>
       <div onClick={handleSubmit} className="button">
         Submit
       </div>
