@@ -1,6 +1,3 @@
-import { useHistory } from "react-router-dom";
-import { useEffect } from "react";
-
 import useUserResults from "../hooks/useUserResults";
 import Header from "../components/Header";
 import LineChart from "../components/LineChart";
@@ -14,8 +11,6 @@ import "./styles/result.scss";
 
 const Result: React.FC = () => {
   const { results, latestResult } = useUserResults();
-  const history = useHistory();
-  // history.go(0);
 
   if (!results.length)
     return (
