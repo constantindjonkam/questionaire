@@ -19,8 +19,6 @@ const TableBody: React.FC<TableBodyProps> = ({ answers, setAnswers }) => {
 
     newAnswers.push({ name, value });
     setAnswers(newAnswers);
-
-    console.log(value, name);
   };
 
   return (
