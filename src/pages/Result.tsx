@@ -1,3 +1,5 @@
+import { useParams } from "react-router-dom";
+
 import useUserResults from "../hooks/useUserResults";
 import Header from "../components/Header";
 import LineChart from "../components/LineChart";
@@ -10,7 +12,8 @@ import avoidance from "../assets/avoidance.jpg";
 import "./styles/result.scss";
 
 const Result: React.FC = () => {
-  const { results, latestResult } = useUserResults();
+  const params = useParams();
+  const { results, latestResult } = useUserResults(params);
 
   if (!results.length)
     return (
