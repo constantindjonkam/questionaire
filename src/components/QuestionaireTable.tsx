@@ -16,9 +16,7 @@ const QuestionaireTable: React.FC<QuestionaireTableProps> = () => {
     if (getAllQuestions().length !== answers.length)
       return alert("You must complete all the questions");
 
-    const total = answers.reduce((a, c) => Number(c.value) + a, 0);
-    // const avoidance = answers;
-    addResult("gostar", answers, total);
+    addResult("gostar", answers);
     history.push("/result");
   };
 
