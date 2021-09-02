@@ -15,7 +15,7 @@ export interface ResultProp {
 const TableBody: React.FC<TableBodyProps> = ({ answers, setAnswers }) => {
   const handleChange = (event: FormEvent<HTMLTableRowElement>) => {
     const { name, value } = event.target as HTMLInputElement;
-    const newAnswers = answers.filter((ans) => ans !== { name, value });
+    const newAnswers = answers.filter((ans) => ans.name !== name);
 
     newAnswers.push({ name, value });
     setAnswers(newAnswers);
