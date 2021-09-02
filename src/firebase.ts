@@ -9,8 +9,9 @@ import {
   serverTimestamp,
 } from "firebase/firestore/lite";
 
-import { ResultProp } from "./components/TableBody";
+import { orderByDate } from "./utils/dateFilter";
 import { pointsCalculator } from "./utils/pointsCalulator";
+import { ResultProp } from "./components/TableBody";
 
 export interface UserResult {
   avoidance: number;
@@ -59,7 +60,7 @@ async function getUserResults(user: string) {
     console.log("Could not get user results from db");
   }
 
-  return results;
+  return orderByDate(results);
 }
 
 async function addResult(user: string, result: ResultProp[]) {
