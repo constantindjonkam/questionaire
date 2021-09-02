@@ -1,32 +1,35 @@
-import { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
-import { useParams } from "react-router-dom";
+import { UserResult } from "../firebase";
 
-import { getUserResults, UserResult } from "../firebase";
 import { randomColors } from "../utils/randomColor";
 
-export interface LineChartProps {}
+export interface LineChartProps {
+  result: UserResult[];
+}
 
-const LineChart: React.FC<LineChartProps> = () => {
-  const [result, setResult] = useState([] as UserResult[]);
-  const params = useParams();
+const LineChart: React.FC<LineChartProps> = ({ result }) => {
+  const scoreComparator = () => {
+    if (result.length < 2) return;
 
-  useEffect(() => {
-    (async () => {
-      const res = await getUserResults((params as { id: string }).id);
-      setResult(res);
-    })();
-  }, [params]);
+    if (result[0].total > result[1].total)
+      return "You are experiencing an increased in stress. Please consult a doctor immidiately.";
+    else if (result[0].total < result[1].total)
+      return "You are starting to feel better. Please keep up!";
+
+    return "No improvement on your health detected. Please consult a doctor immidiately to check if everything is alright.";
+  };
 
   return (
     <div className="lineChart">
       <Line
         data={{
-          labels: result.map((res, i) => new Date(res.created.seconds * 1000).toLocaleDateString()),
+          labels: result
+            .map((res, i) => new Date(res.created.seconds * 1000).toLocaleDateString())
+            .reverse(),
           datasets: [
             {
-              label: "Survey result",
-              data: result.map((res) => res.total),
+              label: "Survey result history",
+              data: result.map((res) => res.total).reverse(),
               backgroundColor: randomColors(result.map((res) => res.total).length),
               borderColor: randomColors(result.map((res) => res.total).length),
               borderWidth: 1,
@@ -36,7 +39,12 @@ const LineChart: React.FC<LineChartProps> = () => {
         width={1000}
         height={400}
       />
-      <p>You did great compared to last time!</p>
+      <p
+        className="lineChart__message"
+        style={{ marginTop: 40, color: "tomato", textAlign: "center" }}
+      >
+        {scoreComparator()}
+      </p>
     </div>
   );
 };
