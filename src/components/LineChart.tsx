@@ -16,8 +16,6 @@ const LineChart: React.FC<LineChartProps> = () => {
       const res = await getUserResults((params as { id: string }).id);
       setResult(res);
     })();
-
-    console.log(randomColors(3));
   }, [params]);
 
   return (
