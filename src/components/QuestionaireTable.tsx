@@ -4,11 +4,9 @@ import { useHistory } from "react-router-dom";
 import "./styles/questionaireTable.scss";
 import TableBody, { ResultProp } from "./TableBody";
 import { getAllQuestions } from "../services/questionsData";
-import { addResult } from "../firebase";
+import { addResult } from "../services/userResults";
 
-export interface QuestionaireTableProps {}
-
-const QuestionaireTable: React.FC<QuestionaireTableProps> = () => {
+const QuestionaireTable: React.FC = () => {
   const [answers, setAnswers] = useState([] as ResultProp[]);
   const history = useHistory();
 
