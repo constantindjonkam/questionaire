@@ -1,65 +1,47 @@
 import { FormEvent } from "react";
 
-import questionsData from "../services/questionsData";
+import { getAllQuestions } from "../services/questionsData";
 
-export interface TableBodyProps {}
+export interface TableBodyProps {
+  answers: ResultProp[];
+  setAnswers: (result: ResultProp[]) => void;
+}
 
-const TableBody: React.FC<TableBodyProps> = () => {
+export interface ResultProp {
+  name: string;
+  value: string;
+}
+
+const TableBody: React.FC<TableBodyProps> = ({ answers, setAnswers }) => {
   const handleChange = (event: FormEvent<HTMLTableRowElement>) => {
-    console.log((event.target as any).value, (event.target as any).name);
+    const { name, value } = event.target as HTMLInputElement;
+    const newAnswers = answers.filter((ans) => ans !== { name, value });
+
+    newAnswers.push({ name, value });
+    setAnswers(newAnswers);
+
+    console.log(value, name);
   };
 
   return (
     <tbody>
-      {questionsData.map(({ questions }) =>
-        questions.map((question, i) => (
-          <tr key={i} onChange={handleChange}>
-            <td>
-              <p className="questionaireTable__questions">{question}</p>
-            </td>
-            <td>
+      {getAllQuestions().map((question, i) => (
+        <tr key={i} onChange={handleChange}>
+          <td>
+            <p className="questionaireTable__questions">{question}</p>
+          </td>
+          {[...Array(5)].map((v, j) => (
+            <td key={j}>
               <input
                 type="radio"
-                name={`answer${i}`}
-                value="not_at_all"
+                name={`question${i + 1}`}
+                value={`${j}`}
                 className="questionaireTable__input"
               />
             </td>
-            <td>
-              <input
-                type="radio"
-                name={`answer${i}`}
-                value="a_little_bit"
-                className="questionaireTable__input"
-              />
-            </td>
-            <td>
-              <input
-                type="radio"
-                name={`answer${i}`}
-                value="moderately"
-                className="questionaireTable__input"
-              />
-            </td>
-            <td>
-              <input
-                type="radio"
-                name={`answer${i}`}
-                value="quite_a_bit"
-                className="questionaireTable__input"
-              />
-            </td>
-            <td>
-              <input
-                type="radio"
-                name={`answer${i}`}
-                value="extremely"
-                className="questionaireTable__input"
-              />
-            </td>
-          </tr>
-        ))
-      )}
+          ))}
+        </tr>
+      ))}
     </tbody>
   );
 };
