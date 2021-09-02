@@ -1,7 +1,27 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, getDocs, addDoc } from "firebase/firestore/lite";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  addDoc,
+  where,
+  query,
+  serverTimestamp,
+} from "firebase/firestore/lite";
 
 import { ResultProp } from "./components/TableBody";
+import { pointsCalculator } from "./utils/pointsCalulator";
+
+export interface UserResult {
+  avoidance: number;
+  intrusions: number;
+  cognitions: number;
+  hypervigilance: number;
+  result: ResultProp[];
+  total: number;
+  user: string;
+  created: { seconds: number; nanoseconds: number };
+}
 
 const firebaseConfig = {
   apiKey: "AIzaSyDoPVoF4dQYw9HICIBT6YMrejiyUMpnYzQ",
@@ -28,16 +48,41 @@ async function getResults() {
   }
 }
 
-async function addResult(user: string, result: ResultProp[], total: number) {
+async function getUserResults(user: string) {
+  const results = [] as UserResult[];
+  const q = query(collection(db, "results"), where("user", "==", user));
+
+  try {
+    const resultSnapshot = await getDocs(q);
+    resultSnapshot.forEach((doc) => results.push(doc.data() as UserResult));
+  } catch (error) {
+    console.log("Could not get user results from db");
+  }
+
+  return results;
+}
+
+async function addResult(user: string, result: ResultProp[]) {
+  const total = result.reduce((a, c) => Number(c.value) + a, 0);
+  const avoidance = pointsCalculator(result, 1, 5);
+  const intrusions = pointsCalculator(result, 6, 7);
+  const cognitions = pointsCalculator(result, 8, 14);
+  const hypervigilance = pointsCalculator(result, 15, 20);
+
   try {
     await addDoc(collection(db, "results"), {
       user,
       result: result,
+      avoidance,
+      intrusions,
+      cognitions,
+      hypervigilance,
       total,
+      created: serverTimestamp(),
     });
   } catch (error) {
     console.log("Could not add result to db");
   }
 }
 
-export { getResults, addResult };
+export { getResults, addResult, getUserResults };
