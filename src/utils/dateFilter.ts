@@ -1,4 +1,4 @@
-import { UserResult } from "../firebase";
+import { UserResult } from "../services/userResults";
 
 export const orderByDate = (results: UserResult[], order = 1) => {
   // 0 for ascending ---- 1 for descending order(default)
