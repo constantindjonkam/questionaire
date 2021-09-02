@@ -9,9 +9,8 @@ function App() {
     <div className="App">
       <Router>
         <Switch>
-          <Route path="/result" component={Result} />
+          <Route path="/result/:id" component={Result} />
           <Route path="/" component={Question} />
-          <Route />
         </Switch>
       </Router>
     </div>
