@@ -1,3 +1,4 @@
+import Header from "../components/Header";
 import QuestionaireTable from "../components/QuestionaireTable";
 import "./styles/question.scss";
 
@@ -6,7 +7,7 @@ export interface QuestionProps {}
 const Question: React.FC<QuestionProps> = () => {
   return (
     <div className="question">
-      <h2>Quick Survey</h2>
+      <Header title="Quick Survey" />
       <p className="question__instructions">
         <span>Instructions: </span>
         Below is a list of problems that people sometimes have in response to a very stressful
