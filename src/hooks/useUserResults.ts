@@ -7,9 +7,11 @@ const useUserResults = (params: object) => {
   const latestResult = results[0];
 
   useEffect(() => {
-    getUserResults((params as { id: string }).id)
-      .then((res) => setResults(res)) //orderByDate(
-      .catch(() => console.log("could not get user results"));
+    setTimeout(() => {
+      getUserResults((params as { id: string }).id)
+        .then((res) => setResults(res)) //orderByDate(
+        .catch(() => console.log("could not get user results"));
+    }, 100);
   }, [params]);
 
   return { results, latestResult };
