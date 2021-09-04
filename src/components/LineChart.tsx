@@ -14,7 +14,7 @@ const LineChart: React.FC<LineChartProps> = ({ results }) => {
       <Line
         data={{
           labels: results
-            .map((res, i) => new Date(res.created.seconds * 1000).toLocaleDateString())
+            .map((res, i) => new Date(res.created?.seconds * 1000).toLocaleDateString())
             .reverse(),
           datasets: [
             {
