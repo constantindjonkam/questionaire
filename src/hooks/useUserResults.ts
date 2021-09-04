@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router";
 
 import { getUserResults, UserResult } from "../services/userResults";
 
-const useUserResults = (params: object) => {
-  const [results, setResults] = useState<UserResult[]>([]);
-  const latestResult = results[0];
+const useUserResults = () => {
+  const [results, setResults] = useState<UserResult[] | null>(null);
+  const latestResult = results && results[0];
+  const params = useParams();
 
   useEffect(() => {
-    setTimeout(() => {
-      getUserResults((params as { id: string }).id)
-        .then((res) => setResults(res)) //orderByDate(
-        .catch(() => console.log("could not get user results"));
-    }, 100);
+    const unsubscribe = getUserResults((params as { id: string }).id, setResults);
+
+    return unsubscribe;
   }, [params]);
 
   return { results, latestResult };
