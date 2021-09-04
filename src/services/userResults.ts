@@ -5,7 +5,8 @@ import {
   where,
   query,
   serverTimestamp,
-} from "firebase/firestore/lite";
+  onSnapshot,
+} from "firebase/firestore";
 import { db } from "../firebase";
 import { ResultProp } from "../components/TableBody";
 import { orderByDate } from "../utils/dateFilter";
@@ -33,19 +34,21 @@ async function getResults() {
   }
 }
 
-async function getUserResults(user: string) {
-  const results = [] as UserResult[];
+const getUserResults = (user: string, setUserResults: (res: UserResult[]) => void) => {
   const q = query(collection(db, "results"), where("user", "==", user));
 
-  try {
-    const resultSnapshot = await getDocs(q);
-    resultSnapshot.forEach((doc) => results.push(doc.data() as UserResult));
-  } catch (error) {
-    console.log("Could not get user results from db");
-  }
+  const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    const userResults = [] as UserResult[];
 
-  return orderByDate(results);
-}
+    querySnapshot.forEach((doc) => {
+      userResults.push(doc.data() as UserResult);
+    });
+
+    setUserResults(userResults);
+  });
+
+  return unsubscribe;
+};
 
 async function addResult(user: string, result: ResultProp[]) {
   const total = result.reduce((a, c) => Number(c.value) + a, 0);
